@@ -1,4 +1,4 @@
-package basicUtil;
+package utils.basicUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Properties;
 
-import static basicUtil.b_PropertiesLoadUtil.loadProperties;
-
-public class a_DBUtil_ConnectionPool {
+public class b_DBUtil_ConnectionPool {
     private static LinkedList<Connection> connectionQueue;
 
     private static String driverclass;
@@ -18,7 +16,7 @@ public class a_DBUtil_ConnectionPool {
 
     static {
         try {
-            Properties prop = loadProperties("config.properties");
+            Properties prop = a_PropertiesLoadUtil.loadProperties("config.properties");
             driverclass = prop.getProperty("driverclass");
             url = prop.getProperty("url");
             username = prop.getProperty("username");
@@ -57,7 +55,7 @@ public class a_DBUtil_ConnectionPool {
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, SQLException {
         Connection conn = getConnection();
         Thread.sleep(100000000);
 

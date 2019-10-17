@@ -1,4 +1,4 @@
-package basicUtil;
+package utils;
 
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
