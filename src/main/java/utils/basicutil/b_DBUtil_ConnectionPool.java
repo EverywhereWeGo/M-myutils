@@ -13,6 +13,7 @@ public class b_DBUtil_ConnectionPool {
     private static String url;
     private static String username;
     private static String password;
+    private static int poolsnum;
 
     static {
         try {
@@ -21,9 +22,9 @@ public class b_DBUtil_ConnectionPool {
             url = prop.getProperty("url");
             username = prop.getProperty("username");
             password = prop.getProperty("password");
+            poolsnum = (null == prop.getProperty("poolsnum")) ? 3 : Integer.valueOf(prop.getProperty("poolsnum"));
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 
@@ -37,9 +38,10 @@ public class b_DBUtil_ConnectionPool {
 
     public synchronized static Connection getConnection() {
         try {
+
             if (connectionQueue == null) {
                 connectionQueue = new LinkedList<Connection>();
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < poolsnum; i++) {
                     Connection conn = DriverManager.getConnection(url, username, password);
                     connectionQueue.push(conn);
                 }
@@ -55,9 +57,10 @@ public class b_DBUtil_ConnectionPool {
     }
 
 
-    public static void main(String[] args) throws InterruptedException, SQLException {
+    public static void main(String[] args) throws InterruptedException {
         Connection conn = getConnection();
         Thread.sleep(100000000);
+
 
     }
 }
