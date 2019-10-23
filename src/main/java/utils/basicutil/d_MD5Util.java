@@ -24,3 +24,7 @@ public class d_MD5Util {
         System.out.println(encrypt("test00"));
     }
 }
+
+
+
+
