@@ -30,7 +30,7 @@ public class a_PropertiesLoadUtil {
 
     //实现类似python 配置文件中section的功能
     public static Map<String, String> loadPropertiesGetSetciontoMap(String fileName, String sectionName) {
-        Map<String, String> sectioMap = new HashMap<>();
+        Map<String, String> sectioMap = new HashMap<String,String>();
         InputStream in = a_PropertiesLoadUtil.class.getClassLoader().getResourceAsStream(fileName);
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {
