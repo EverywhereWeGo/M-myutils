@@ -1,4 +1,4 @@
-package com.b_util.basicutil;
+package utils.basicutil;
 
 import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
@@ -15,6 +15,12 @@ import java.util.concurrent.TimeUnit;
 import static com.b_util.basicutil.f_SqlUtil.querySql;
 import static utils.basicutil.a_PropertiesLoadUtil.loadProperties;
 
+
+/*
+初始化创建连接队列
+每次取从队列最后一个取，如果失效则放在队列最前面，如果有效则使用返回后放在队列末尾
+检查程序每分钟取队列第一个检查有效性，没问题则放在最后，有问题则删除旧的并创建新的放在队列最后。
+ */
 public class b_DBUtil_ConnectionPool {
     private static LinkedList<Connection> connectionQueue;
 
@@ -33,6 +39,7 @@ public class b_DBUtil_ConnectionPool {
             password = prop.getProperty("password");
             poolsnum = (null == prop.getProperty("poolsnum")) ? 4 : Integer.valueOf(prop.getProperty("poolsnum"));
             Class.forName(driverclass);
+            createConnectionPool();
             timerConnectionVaildCheck();
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,7 +47,7 @@ public class b_DBUtil_ConnectionPool {
         }
     }
 
-    public synchronized static Connection getConnection() {
+    private static void createConnectionPool() {
         try {
             if (connectionQueue == null) {
                 connectionQueue = new LinkedList<Connection>();
@@ -52,30 +59,47 @@ public class b_DBUtil_ConnectionPool {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public synchronized static Connection getConnection() {
         if (connectionQueue.size() == 0) {
-            System.out.println(connectionQueue);
             System.out.println("连接池耗尽");
-        } else {
-            return connectionQueue.removeFirst();
+        }
+        Connection conn;
+        try {
+            //每次从最后一个取，有问题放最前面
+            for (int i = 0; i < connectionQueue.size(); i++) {
+                conn = connectionQueue.removeLast();
+                if (conn.isValid(1000)) {
+                    return conn;
+                } else {
+                    connectionQueue.addFirst(conn);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
 
-    public static void returnConnection(Connection conn) {
-        connectionQueue.addLast(conn);
+    public synchronized static void returnConnection(Connection conn) {
+        if (null != conn) {
+            connectionQueue.addLast(conn);
+        }
+
     }
 
     //进行数据库连接有效性检查
-    private static void isvaild() {
-        Connection conn = getConnection();
+    private synchronized static void isvaild() {
+        Connection conn = connectionQueue.removeFirst();
         try {
             //如果失效则删除旧的并创建新的
-            if (conn != null && !conn.isValid(1000)) {
-                connectionQueue.remove(conn);
-                connectionQueue.addLast(DriverManager.getConnection(url, username, password));
+            if (conn.isValid(100)) {
+                connectionQueue.addLast(conn);
             } else {
-                returnConnection(conn);
+                connectionQueue.addLast(DriverManager.getConnection(url, username, password));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,7 +108,7 @@ public class b_DBUtil_ConnectionPool {
     }
 
     //每分钟检测连接队列中的连接有效性
-    private static void timerConnectionVaildCheck() {
+    private synchronized static void timerConnectionVaildCheck() {
         ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
                 new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
         executorService.scheduleAtFixedRate(new Runnable() {
