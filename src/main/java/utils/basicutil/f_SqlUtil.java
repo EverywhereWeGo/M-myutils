@@ -8,8 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.b_util.basicutil.b_DBUtil_ConnectionPool.getConnection;
-import static com.b_util.basicutil.b_DBUtil_ConnectionPool.returnConnection;
+import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
+import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
+
 
 public class f_SqlUtil {
     public static JSONArray querySql(String sql) {
@@ -17,33 +18,30 @@ public class f_SqlUtil {
         Connection conn = null;
         try {
             conn = getConnection();
-            PreparedStatement statement = conn.prepareStatement(sql);
-            System.out.println("查询语句:" + sql);
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                System.out.println("查询语句:" + sql);
 
-            long stime = System.currentTimeMillis();
-            ResultSet rs = statement.executeQuery(sql);
-            long etime = System.currentTimeMillis();
-            System.out.println("查询时间:" + (etime - stime) + "ms");
+                long stime = System.currentTimeMillis();
+                ResultSet rs = statement.executeQuery(sql);
+                long etime = System.currentTimeMillis();
+                System.out.println("查询时间:" + (etime - stime) + "ms");
 
-            while (rs.next()) {
-                JSONObject jo = new JSONObject();
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    String columname = rs.getMetaData().getColumnName(i);
-                    jo.put(columname, rs.getString(columname));
+                while (rs.next()) {
+                    JSONObject jo = new JSONObject();
+                    for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                        String columname = rs.getMetaData().getColumnName(i);
+                        jo.put(columname, rs.getString(columname));
+                    }
+                    ja.add(jo);
                 }
-                ja.add(jo);
+                return ja;
             }
-            return ja;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            try {
-                returnConnection(conn);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            returnConnection(conn);
         }
         return null;
     }
-
 }
