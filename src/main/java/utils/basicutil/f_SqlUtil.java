@@ -2,6 +2,8 @@ package com.b_util.basicutil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +15,14 @@ import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
 
 
 public class f_SqlUtil {
+    private final static Logger logger = LoggerFactory.getLogger(f_SqlUtil.class);
+
     public static JSONArray querySql(String sql) {
         JSONArray ja = new JSONArray();
         Connection conn = null;
         try {
             conn = getConnection();
+            logger.info("查询语句:" + sql);
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
                 System.out.println("查询语句:" + sql);
@@ -34,7 +39,8 @@ public class f_SqlUtil {
                     ja.add(jo);
                 }
                 long etime = System.currentTimeMillis();
-                System.out.println("查询时间:" + (etime - stime) + "ms" + "数据量:" + ja.size());
+                logger.info("查询时间:" + (etime - stime) + "ms");
+                logger.info("数据量:" + ja.size() + "条");
                 return ja;
             }
         } catch (SQLException e) {

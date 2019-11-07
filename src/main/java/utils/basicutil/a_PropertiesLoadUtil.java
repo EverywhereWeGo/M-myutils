@@ -46,6 +46,7 @@ public class a_PropertiesLoadUtil {
                     continue;
                 }
                 if (flag) {
+                    //读到下一个section为止
                     if (tempStr.startsWith("[") && tempStr.endsWith("]")) {
                         break;
                     } else {

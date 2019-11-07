@@ -43,7 +43,12 @@ public class e_RedisUtil {
             PORT = Integer.parseInt(prop.getProperty("port"));
             TIMEOUT = Integer.parseInt(prop.getProperty("timeout"));
             AUTH = prop.getProperty("password_redis");
-            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
+            AUTH = prop.getProperty("password_redis");
+            if (null == AUTH) {
+                jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
+            } else {
+                jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
