@@ -24,8 +24,6 @@ public class f_SqlUtil {
 
                 long stime = System.currentTimeMillis();
                 ResultSet rs = statement.executeQuery(sql);
-                long etime = System.currentTimeMillis();
-                System.out.println("查询时间:" + (etime - stime) + "ms");
 
                 while (rs.next()) {
                     JSONObject jo = new JSONObject();
@@ -35,6 +33,8 @@ public class f_SqlUtil {
                     }
                     ja.add(jo);
                 }
+                long etime = System.currentTimeMillis();
+                System.out.println("查询时间:" + (etime - stime) + "ms" + "数据量:" + ja.size());
                 return ja;
             }
         } catch (SQLException e) {

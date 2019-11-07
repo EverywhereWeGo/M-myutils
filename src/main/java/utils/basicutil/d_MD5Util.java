@@ -20,9 +20,9 @@ public class d_MD5Util {
         return "";
     }
 
-    public static void main(String[] args) {
-        System.out.println(encrypt("test00"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(encrypt("test00"));
+//    }
 }
 
 
