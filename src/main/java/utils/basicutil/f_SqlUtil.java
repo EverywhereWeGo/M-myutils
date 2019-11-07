@@ -25,11 +25,8 @@ public class f_SqlUtil {
             logger.info("查询语句:" + sql);
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
-                System.out.println("查询语句:" + sql);
-
                 long stime = System.currentTimeMillis();
                 ResultSet rs = statement.executeQuery(sql);
-
                 while (rs.next()) {
                     JSONObject jo = new JSONObject();
                     for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
