@@ -12,8 +12,9 @@ public class a_PropertiesLoadUtil {
     public static Properties loadProperties(String fileName) {
         Properties prop = new Properties();
         InputStream in = a_PropertiesLoadUtil.class.getClassLoader().getResourceAsStream(fileName);
+        BufferedReader bf = new BufferedReader(new InputStreamReader(in));
         try {
-            prop.load(in);
+            prop.load(bf);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
