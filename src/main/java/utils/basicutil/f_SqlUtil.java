@@ -30,7 +30,7 @@ public class f_SqlUtil {
                 while (rs.next()) {
                     JSONObject jo = new JSONObject();
                     for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                        String columname = rs.getMetaData().getColumnName(i);
+                        String columname = rs.getMetaData().getColumnLabel(i);
                         jo.put(columname, rs.getString(columname));
                     }
                     ja.add(jo);
