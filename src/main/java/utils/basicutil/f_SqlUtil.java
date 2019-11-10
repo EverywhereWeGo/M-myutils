@@ -45,6 +45,6 @@ public class f_SqlUtil {
         } finally {
             returnConnection(conn);
         }
-        return null;
+        return ja;
     }
 }
