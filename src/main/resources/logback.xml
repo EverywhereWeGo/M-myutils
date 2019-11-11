@@ -18,7 +18,7 @@
         <encoder>
             <pattern>
                 <!-- 设置日志输出格式 -->
-                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
     </appender>
@@ -48,7 +48,7 @@
         <encoder>
             <pattern>
                 <!-- 设置日志输出格式 -->
-                %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
     </appender>
@@ -70,9 +70,10 @@
             <fileNamePattern>${log_dir}/warn/%d{yyyy-MM-dd}-warn-log.log</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
-        </encoder>
+        <pattern>
+            <!-- 设置日志输出格式 -->
+            %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+        </pattern>
     </appender>
 
     <!-- INFO级别日志 appender -->
@@ -87,7 +88,10 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>
+                <!-- 设置日志输出格式 -->
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+            </pattern>
         </encoder>
     </appender>
 
@@ -103,7 +107,10 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>
+                <!-- 设置日志输出格式 -->
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+            </pattern>
         </encoder>
     </appender>
 
@@ -119,7 +126,10 @@
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger - %msg%n</pattern>
+            <pattern>
+                <!-- 设置日志输出格式 -->
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+            </pattern>
         </encoder>
     </appender>
 

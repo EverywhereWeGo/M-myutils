@@ -5,8 +5,8 @@ import redis.clients.jedis.Jedis;
 import java.util.Properties;
 
 import static utils.basicutil.a_PropertiesLoadUtil.loadProperties;
-import static utils.basicutil.e_RedisUtil.getJedis;
-import static utils.basicutil.e_RedisUtil.returnResource;
+import static utils.basicutil.c_RedisUtil_ConnectionPool.getJedis;
+import static utils.basicutil.c_RedisUtil_ConnectionPool.returnResource;
 
 public class setmaxdate {
     private static Properties prop = loadProperties("config.properties");
