@@ -2,6 +2,8 @@ package utils.basicutil;
 
 import com.alibaba.fastjson.JSONArray;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,6 +24,7 @@ import static utils.basicutil.a_PropertiesLoadUtil.loadProperties;
 检查程序每分钟取队列第一个检查有效性，没问题则放在最后，有问题则删除旧的并创建新的放在队列最后。
  */
 public class b_DBUtil_ConnectionPool {
+    private final static Logger logger = LoggerFactory.getLogger(b_DBUtil_ConnectionPool.class);
     private static LinkedList<Connection> connectionQueue;
 
     private static String driverclass;
@@ -41,6 +44,7 @@ public class b_DBUtil_ConnectionPool {
             Class.forName(driverclass);
             createConnectionPool();
             timerConnectionVaildCheck();
+            logger.info("数据库连接池创建成功，连接数:" + poolsnum + "个");
         } catch (Exception e) {
             e.printStackTrace();
 
