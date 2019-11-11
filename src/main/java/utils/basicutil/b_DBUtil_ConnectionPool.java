@@ -114,7 +114,7 @@ public class b_DBUtil_ConnectionPool {
     //每分钟检测连接队列中的连接有效性
     private synchronized static void timerConnectionVaildCheck() {
         ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
-                new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+                new BasicThreadFactory.Builder().namingPattern("dbcheck").daemon(true).build());
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
