@@ -8,8 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
-import static utils.basicutil.e_RedisUtil.getJedis;
-import static utils.basicutil.e_RedisUtil.returnResource;
+import static utils.basicutil.c_RedisUtil_ConnectionPool.getJedis;
+import static utils.basicutil.c_RedisUtil_ConnectionPool.returnResource;
 
 public class redisandmysqltest {
     public static void main(String[] args) {

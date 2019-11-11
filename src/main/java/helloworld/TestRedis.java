@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static utils.basicutil.e_RedisUtil.getJedis;
+import static utils.basicutil.c_RedisUtil_ConnectionPool.getJedis;
 
 public class TestRedis {
 
