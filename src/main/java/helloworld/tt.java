@@ -96,6 +96,7 @@ public class tt {
             e.printStackTrace();
 
         } finally {
+            System.out.println(1);
             returnConnection(conn);
 
 
@@ -103,6 +104,10 @@ public class tt {
 
 
     }
+
+
+
+
 
 
 }
