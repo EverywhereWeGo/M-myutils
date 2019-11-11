@@ -1,5 +1,7 @@
 package utils.basicutil;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -7,8 +9,11 @@ import redis.clients.jedis.JedisPoolConfig;
 import java.util.Properties;
 
 import static utils.basicutil.a_PropertiesLoadUtil.loadProperties;
-
-public class e_RedisUtil {
+/*
+ 如果redis 服务端设置了timeout 则redis可能会失效，每次使用时需要重新getredis()
+ */
+public class c_RedisUtil_ConnectionPool {
+    private final static Logger logger = LoggerFactory.getLogger(c_RedisUtil_ConnectionPool.class);
     private static JedisPool jedisPool = null;
     //服务器IP地址
     private static String ADDR;
@@ -39,16 +44,17 @@ public class e_RedisUtil {
             config.setMaxIdle(Integer.valueOf(prop.getProperty("max_idle")));
             config.setMaxWaitMillis(Integer.valueOf(prop.getProperty("max_wait")));
             config.setTestOnBorrow(Boolean.valueOf(prop.getProperty("true")));
+            config.setTestOnReturn(true);
             ADDR = prop.getProperty("ip");
             PORT = Integer.parseInt(prop.getProperty("port"));
             TIMEOUT = Integer.parseInt(prop.getProperty("timeout"));
-            AUTH = prop.getProperty("password_redis");
             AUTH = prop.getProperty("password_redis");
             if (null == AUTH) {
                 jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
             } else {
                 jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
             }
+            logger.info("redis连接池创建成功，连接数:" + Integer.valueOf(prop.getProperty("max_active")) + "个");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,9 +65,7 @@ public class e_RedisUtil {
      */
 
     public synchronized static Jedis getJedis() {
-
         try {
-
             if (jedisPool != null) {
                 Jedis resource = jedisPool.getResource();
                 return resource;
@@ -73,7 +77,6 @@ public class e_RedisUtil {
             e.printStackTrace();
             return null;
         }
-
     }
 
     /***
@@ -82,10 +85,26 @@ public class e_RedisUtil {
      */
 
     public static void returnResource(final Jedis jedis) {
-        if (jedis != null) {
-            jedisPool.returnResource(jedis);
+        try {
+            if (jedis != null) {
+                jedisPool.returnResource(jedis);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
+
+    public static void returnBrokenResource(final Jedis jedis) {
+        try {
+            if (jedis != null) {
+                jedisPool.returnBrokenResource(jedis);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 }

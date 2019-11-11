@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class c_Dateutil {
+public class d_Dateutil {
     public static boolean isRightDateStr(String dateStr, String strformat) {
         boolean convertSuccess = true;
         SimpleDateFormat format = new SimpleDateFormat(strformat);
@@ -49,10 +49,7 @@ public class c_Dateutil {
      * @return
      * @throws Exception
      */
-    public static String dateToString(Date date, String format) throws Exception {
-        if (date == null) {
-            throw new Exception("dateToString:要转换的日期参数为空！");
-        }
+    public static String dateToString(Date date, String format) {
         String dateStr = "";
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
