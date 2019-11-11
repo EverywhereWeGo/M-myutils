@@ -97,6 +97,8 @@ public class tt {
 
         } finally {
             System.out.println(1);
+            System.out.println(2);
+
             returnConnection(conn);
 
 
