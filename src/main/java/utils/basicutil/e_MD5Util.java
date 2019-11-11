@@ -3,7 +3,7 @@ package utils.basicutil;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
-public class d_MD5Util {
+public class e_MD5Util {
     public static String encrypt(String dataStr) {
         try {
             MessageDigest m = MessageDigest.getInstance("MD5");
