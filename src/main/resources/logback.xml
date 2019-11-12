@@ -15,6 +15,14 @@
 
     <!-- ConsoleAppender 控制台输出日志 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <!--过滤特定字串-->
+            <evaluator>
+                <expression>return message.contains("ProducerConfig");</expression>
+            </evaluator>
+            <OnMatch>DENY</OnMatch>
+            <OnMismatch>ACCEPT</OnMismatch>
+        </filter>
         <encoder>
             <pattern>
                 <!-- 设置日志输出格式 -->
@@ -141,8 +149,8 @@
         <appender-ref ref="console" />
         <!-- 文件输出 -->
         <appender-ref ref="ERROR" />
-        <appender-ref ref="INFO" />
         <appender-ref ref="WARN" />
+        <appender-ref ref="INFO" />
         <appender-ref ref="DEBUG" />
         <appender-ref ref="TRACE" />
     </root>

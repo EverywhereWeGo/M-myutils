@@ -44,6 +44,12 @@
             <artifactId>logback-classic</artifactId>
             <version>1.1.7</version>
         </dependency>
+        <!-- 用于lodback过滤日志 -->
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.0.15</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -106,9 +112,6 @@
             </plugin>
 
         </plugins>
-        >
-
-
     </build>
 
 
