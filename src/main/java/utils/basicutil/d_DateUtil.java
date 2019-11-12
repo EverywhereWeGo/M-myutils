@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class d_Dateutil {
+public class d_DateUtil {
     public static boolean isRightDateStr(String dateStr, String strformat) {
         boolean convertSuccess = true;
         SimpleDateFormat format = new SimpleDateFormat(strformat);

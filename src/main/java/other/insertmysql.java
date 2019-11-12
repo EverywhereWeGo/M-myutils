@@ -19,7 +19,7 @@ import java.util.Date;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
 import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
-import static utils.basicutil.d_Dateutil.dateToString;
+import static utils.basicutil.d_DateUtil.dateToString;
 
 
 public class insertmysql {

@@ -68,7 +68,7 @@ public class b_DBUtil_ConnectionPool {
 
     public synchronized static Connection getConnection() {
         if (connectionQueue.size() == 0) {
-            System.out.println("连接池耗尽");
+            logger.warn("连接池耗尽");
         }
         Connection conn;
         try {
