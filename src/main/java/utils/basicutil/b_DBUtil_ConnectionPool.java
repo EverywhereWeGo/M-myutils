@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
@@ -96,9 +97,9 @@ public class b_DBUtil_ConnectionPool {
     }
 
     //进行数据库连接有效性检查
-    private synchronized static void isvaild() {
-        Connection conn = connectionQueue.removeFirst();
+    private static void isvaild() {
         try {
+            Connection conn = connectionQueue.removeFirst();
             //如果失效则删除旧的并创建新的
             if (conn.isValid(100)) {
                 connectionQueue.addLast(conn);
@@ -118,9 +119,14 @@ public class b_DBUtil_ConnectionPool {
         executorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                isvaild();
+                try {
+                    isvaild();
+                } catch (Exception e) {
+                    logger.error("dbcheck失败:" + e.getMessage() + ":" + Arrays.toString(e.getStackTrace()));
+
+                }
             }
-        }, 60, 60, TimeUnit.SECONDS);
+        }, 6, 6, TimeUnit.SECONDS);
     }
 
 
