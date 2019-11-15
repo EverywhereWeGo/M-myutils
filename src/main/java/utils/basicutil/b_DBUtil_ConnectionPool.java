@@ -98,6 +98,10 @@ public class b_DBUtil_ConnectionPool {
 
     //进行数据库连接有效性检查
     private static void isvaild() {
+        if (connectionQueue.size() == 0) {
+            logger.warn("连接池耗尽,无可用检查");
+            return;
+        }
         try {
             Connection conn = connectionQueue.removeFirst();
             //如果失效则删除旧的并创建新的
@@ -105,10 +109,10 @@ public class b_DBUtil_ConnectionPool {
                 connectionQueue.addLast(conn);
             } else {
                 connectionQueue.addLast(DriverManager.getConnection(url, username, password));
+                logger.warn("connection失效已删除并创建新的connection");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
     }
 
@@ -126,11 +130,74 @@ public class b_DBUtil_ConnectionPool {
 
                 }
             }
-        }, 6, 6, TimeUnit.SECONDS);
+        }, 60, 60, TimeUnit.SECONDS);
     }
 
 
     public static void main(String[] args) throws InterruptedException, SQLException {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = getConnection();
+                try {
+                    Thread.sleep(12000);
+                    returnConnection(conn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "1").start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = getConnection();
+                try {
+                    Thread.sleep(12000);
+                    returnConnection(conn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "2").start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = getConnection();
+                try {
+                    Thread.sleep(12000);
+                    returnConnection(conn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "3").start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = getConnection();
+                try {
+                    Thread.sleep(12000);
+                    returnConnection(conn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "4").start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Connection conn = getConnection();
+                try {
+                    Thread.sleep(12000);
+                    returnConnection(conn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, "5").start();
+
+
         for (int i = 0; i < 100; i++) {
             JSONArray a2 = querySql("select 1");
             querySql("select 1");
