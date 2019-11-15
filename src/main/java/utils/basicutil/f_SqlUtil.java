@@ -25,6 +25,7 @@ public class f_SqlUtil {
             logger.info("查询语句:" + sql);
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
+//                statement.setQueryTimeout(120);
                 long stime = System.currentTimeMillis();
                 ResultSet rs = statement.executeQuery(sql);
                 while (rs.next()) {

@@ -97,7 +97,7 @@ public class b_DBUtil_ConnectionPool {
     }
 
     //进行数据库连接有效性检查
-    private static void isvaild() {
+    private synchronized static void isvaild() {
         if (connectionQueue.size() == 0) {
             logger.warn("连接池耗尽,无可用检查");
             return;
@@ -117,7 +117,7 @@ public class b_DBUtil_ConnectionPool {
     }
 
     //每分钟检测连接队列中的连接有效性
-    private synchronized static void timerConnectionVaildCheck() {
+    private static void timerConnectionVaildCheck() {
         ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
                 new BasicThreadFactory.Builder().namingPattern("dbcheck").daemon(true).build());
         executorService.scheduleAtFixedRate(new Runnable() {
