@@ -17,8 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
-import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
+import static com.utils.b_DBUtil_ConnectionPool.getConnection;
+import static com.utils.b_DBUtil_ConnectionPool.returnConnection;
 import static utils.basicutil.d_DateUtil.dateToString;
 
 
