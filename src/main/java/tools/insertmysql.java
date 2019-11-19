@@ -1,4 +1,4 @@
-package other;
+package tools;
 
 /*
 向mysql插入300万数据
@@ -17,8 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static com.utils.b_DBUtil_ConnectionPool.getConnection;
-import static com.utils.b_DBUtil_ConnectionPool.returnConnection;
+import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
+import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
 import static utils.basicutil.d_DateUtil.dateToString;
 
 
@@ -33,10 +33,10 @@ public class insertmysql {
             // 将连接的自动提交关闭，数据在传送到数据库的过程中相当耗时
             conn.setAutoCommit(false);
             long start = System.currentTimeMillis();
-            for (int i = 0; i < 300; i++) {
+            for (int i = 0; i < 30000; i++) {
                 long start2 = System.currentTimeMillis();
                 // 一次性执行插入10万条数据
-                for (int j = 0; j < 100; j++) {
+                for (int j = 0; j < 500; j++) {
                     prep.setString(1, i + "");
                     prep.setString(2, j + "");
                     prep.setString(3, i + j + "");
@@ -45,7 +45,6 @@ public class insertmysql {
                     // 将预处理添加到批中
                     prep.addBatch();
                 }
-
                 // 预处理批量执行
                 prep.executeBatch();
                 prep.clearBatch();
