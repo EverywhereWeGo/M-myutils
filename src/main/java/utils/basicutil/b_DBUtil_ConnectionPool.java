@@ -1,4 +1,4 @@
-package com.utils;
+package utils.basicutil;
 
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.slf4j.Logger;
