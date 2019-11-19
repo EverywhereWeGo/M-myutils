@@ -2,13 +2,14 @@ package utils.basicutil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.carrotsearch.sizeof.RamUsageEstimator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import po.SamplePojo;
 
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
@@ -37,7 +38,6 @@ public class f_SqlUtil {
         }
         return null;
     }
-
 
     private static JSONArray resultSetToJson(ResultSet rs) throws SQLException {
         JSONArray ja = new JSONArray();
@@ -97,7 +97,7 @@ public class f_SqlUtil {
                 rs.beforeFirst();
             }
         } catch (SQLException e) {
-            logger.error("sql查询失败");
+            logger.error("sql查询失败:" + Arrays.toString(e.getStackTrace()));
         } finally {
             returnConnection(conn);
         }
@@ -105,12 +105,42 @@ public class f_SqlUtil {
     }
 
 
-    public static void main(String[] args) {
-        JSONArray a = querySql("select a as asdf ,b as qwer  from datatest limit 100 ");
-        System.out.println(a);
+    private static void insertSql(String sql, JSONArray ja) {
+        Connection conn = getConnection();
+        try {
+            logger.info("插入语句:" + sql);
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                conn.setAutoCommit(false);
+                for (int i = 0; i < ja.size(); i++) {
+                    JSONObject jo = ja.getJSONObject(i);
+                    int k = 1;
+                    for (String s : jo.keySet()) {
+                        statement.setString(k++, jo.getString(s));
+                    }
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+                statement.clearBatch();
+                conn.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        List<SamplePojo> b = querySql("select a as asdf ,b as qwer  from datatest limit 100", SamplePojo.class);
-        System.out.println(b);
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        JSONArray a = querySql("select a as asdf ,b as qwer  from datatest limit 10 ");
+        JSONObject jo = a.getJSONObject(0);
+        for (String s : jo.keySet()) {
+            System.out.println(s);
+        }
+
+        insertSql("insert into hahhaa (a,b) values (?,?) ", a);
+
+//        List<SamplePojo> b = querySql(createSelectPreSql("datatest", SamplePojo.class) + " limit 10000", SamplePojo.class);
+//        System.out.println(b);
 
     }
 }
