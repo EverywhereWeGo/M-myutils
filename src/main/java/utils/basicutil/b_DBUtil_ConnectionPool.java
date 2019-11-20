@@ -26,7 +26,6 @@ public class b_DBUtil_ConnectionPool {
     private static Logger logger = LoggerFactory.getLogger(b_DBUtil_ConnectionPool.class);
     private static LinkedList<Connection> connectionQueue;
 
-    private static String driverclass;
     private static String url;
     private static String username;
     private static String password;
@@ -35,12 +34,11 @@ public class b_DBUtil_ConnectionPool {
     static {
         try {
             Properties prop = loadProperties("config.properties");
-            driverclass = prop.getProperty("driverclass");
             url = prop.getProperty("url");
             username = prop.getProperty("username");
             password = prop.getProperty("password");
             poolsnum = (null == prop.getProperty("poolsnum")) ? 4 : Integer.valueOf(prop.getProperty("poolsnum"));
-            Class.forName(driverclass);
+            Class.forName(prop.getProperty("driverclass"));
             createConnectionPool();
             timerConnectionVaildCheck();
             logger.info("数据库连接池创建成功，连接数:" + poolsnum + "个");
@@ -133,7 +131,7 @@ public class b_DBUtil_ConnectionPool {
     }
 
 
-    public static void main(String[] args) throws InterruptedException, SQLException {
+    public static void main(String[] args) {
 
         new Thread(new Runnable() {
             @Override
@@ -141,8 +139,6 @@ public class b_DBUtil_ConnectionPool {
                 Connection conn = getConnection();
             }
         }, "1").start();
-
-
     }
 
 }
