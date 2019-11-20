@@ -36,10 +36,13 @@ public class f_CreateSqlByObject {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         String a = createInsertPreSql("hahhaa", SamplePojo.class);
         System.out.println(a);
         String b = createSelectPreSql("asdfasdf", SamplePojo.class);
         System.out.println(b);
+        Thread.sleep(10000000);
+
     }
+
 }

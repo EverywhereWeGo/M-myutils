@@ -1,11 +1,23 @@
 package utils.basicutil;
 
 public class i_StringUtil {
-    public static String getSubString(String str, String startstr, String endstr) {
-        if ((-1 == str.lastIndexOf(startstr)) || (-1 == str.lastIndexOf(endstr))) {
+    public static String getLastSubString(String str, String startstr, String endstr) {
+        int start = str.lastIndexOf(startstr);
+        int end = str.lastIndexOf(endstr);
+        if ((-1 == start) || (-1 == end)) {
             System.out.println("未找到起始子串或结束子串");
             return null;
         }
-        return str.substring(str.lastIndexOf(startstr) + startstr.length(), str.lastIndexOf(endstr));
+        return str.substring(start + startstr.length(), end);
+    }
+
+    public static String getFirstSubString(String str, String startstr, String endstr) {
+        int start = str.indexOf(startstr);
+        int end = str.indexOf(endstr);
+        if ((-1 == start) || (-1 == end)) {
+            System.out.println("未找到起始子串或结束子串");
+            return null;
+        }
+        return str.substring(start + startstr.length(), end);
     }
 }

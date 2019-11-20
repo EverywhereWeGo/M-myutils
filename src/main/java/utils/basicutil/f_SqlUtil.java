@@ -10,9 +10,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
 import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
+import static utils.basicutil.i_StringUtil.getFirstSubString;
 
 
 public class f_SqlUtil {
@@ -103,7 +105,7 @@ public class f_SqlUtil {
         return rs;
     }
 
-
+    //插入语句中的字段，必须和json中的key一模一样
     private static void insertSql(String sql, JSONArray ja) {
         Connection conn = getConnection();
         try {
@@ -111,11 +113,15 @@ public class f_SqlUtil {
             if (conn != null) {
                 PreparedStatement statement = conn.prepareStatement(sql);
                 conn.setAutoCommit(false);
+                String[] fileds = getFiledsbySql(sql);
                 for (int i = 0; i < ja.size(); i++) {
                     JSONObject jo = ja.getJSONObject(i);
-                    int k = 1;
-                    for (String s : jo.keySet()) {
-                        statement.setString(k++, jo.getString(s));
+                    for (int j = 1; j <= fileds.length; j++) {
+                        if (jo.containsKey(fileds[j - 1])) {
+                            statement.setString(j, jo.getString(fileds[j - 1]));
+                        } else {
+                            throw new Exception("字段不匹配");
+                        }
                     }
                     statement.addBatch();
                 }
@@ -123,20 +129,22 @@ public class f_SqlUtil {
                 statement.clearBatch();
                 conn.commit();
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        JSONArray a = querySql("select a as asdf ,b as qwer  from datatest limit 10 ");
-        JSONObject jo = a.getJSONObject(0);
-        for (String s : jo.keySet()) {
-            System.out.println(s);
-        }
+    private static String[] getFiledsbySql(String sql) {
+        return Objects.requireNonNull(getFirstSubString(sql, "(", ")")).split(",");
+    }
+
+    public static void main(String[] args) {
+        JSONArray a = querySql("select a ,b  from datatest limit 10 ");
+        System.out.println(a);
+
 
         insertSql("insert into hahhaa (a,b) values (?,?) ", a);
+
 
 //        List<SamplePojo> b = querySql(createSelectPreSql("datatest", SamplePojo.class) + " limit 10000", SamplePojo.class);
 //        System.out.println(b);
