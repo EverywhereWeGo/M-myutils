@@ -6,7 +6,7 @@ package tools;
 import static tools.ChineseToPinyin.firsttoUpperCase;
 import static tools.ChineseToPinyin.getFirstPinYin;
 
-public class DocTOPOJO {
+public class DocToPojo {
     public static void main(String[] args) {
 
         String doc = "号牌号码," +
