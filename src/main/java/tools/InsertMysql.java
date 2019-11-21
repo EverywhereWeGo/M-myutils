@@ -22,7 +22,7 @@ import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
 import static utils.basicutil.d_DateUtil.dateToString;
 
 
-public class insertmysql {
+public class InsertMysql {
     public static void main(String[] args) {
 
         Connection conn = getConnection();

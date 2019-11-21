@@ -1,4 +1,4 @@
-package helloworld;
+package tools;
 
 import redis.clients.jedis.Jedis;
 
