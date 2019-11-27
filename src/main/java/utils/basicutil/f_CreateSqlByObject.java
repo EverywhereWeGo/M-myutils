@@ -4,25 +4,30 @@ import po.SamplePojo;
 
 import java.lang.reflect.Field;
 
+import static tools.ChineseToPinyin.firsttoUpperCase;
+
 public class f_CreateSqlByObject {
-    public static String createInsertPreSql(String talename, Class clazz) {
+    public static <T> void createInsertPreSql(String talename, Class<T> clazz) {
         String modelsql = "insert into {0} ({1}) values ({2}) ";
         StringBuffer key = new StringBuffer();
         StringBuffer value = new StringBuffer();
+        StringBuffer setPreparement = new StringBuffer();
         Field[] fields = clazz.getDeclaredFields();
         for (Field field : fields) {
             key.append(field.getName());
             key.append(",");
             value.append("?,");
+            setPreparement.append("yjxx.set").append(firsttoUpperCase(field.getName())).append("();\n");
         }
         key.deleteCharAt(key.length() - 1);
         value.deleteCharAt(value.length() - 1);
         String sql = modelsql.replace("{0}", talename).replace("{1}", key).replace("{2}", value);
-        return sql;
+        String insert = setPreparement.toString();
+        System.out.println(sql);
+        System.out.println(insert);
     }
 
-
-    public static String createSelectPreSql(String talename, Class clazz) {
+    public static <T> void createSelectPreSql(String talename, Class<T> clazz) {
         String modelsql = "select {0} from {1}";
         StringBuffer key = new StringBuffer();
         Field[] fields = clazz.getDeclaredFields();
@@ -32,17 +37,13 @@ public class f_CreateSqlByObject {
         }
         key.deleteCharAt(key.length() - 1);
         String sql = modelsql.replace("{0}", key).replace("{1}", talename);
-        return sql;
+        System.out.println(sql);
     }
 
 
-    public static void main(String[] args) throws InterruptedException {
-        String a = createInsertPreSql("hahhaa", SamplePojo.class);
-        System.out.println(a);
-        String b = createSelectPreSql("asdfasdf", SamplePojo.class);
-        System.out.println(b);
-        Thread.sleep(10000000);
-
+    public static void main(String[] args) {
+        createInsertPreSql("vehicle_pass", SamplePojo.class);
+        createSelectPreSql("vehicle_pass", SamplePojo.class);
     }
 
 }
