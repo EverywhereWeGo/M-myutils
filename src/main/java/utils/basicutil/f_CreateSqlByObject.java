@@ -4,7 +4,7 @@ import po.SamplePojo;
 
 import java.lang.reflect.Field;
 
-import static tools.ChineseToPinyin.firsttoUpperCase;
+import static utils.basicutil.i_StringUtil.firsttoUpperCase;
 
 public class f_CreateSqlByObject {
     public static <T> void createInsertPreSql(String talename, Class<T> clazz) {
@@ -42,7 +42,7 @@ public class f_CreateSqlByObject {
 
 
     public static void main(String[] args) {
-        createInsertPreSql("vehicle_pass", SamplePojo.class);
+        createInsertPreSql("qwer", SamplePojo.class);
         createSelectPreSql("vehicle_pass", SamplePojo.class);
     }
 

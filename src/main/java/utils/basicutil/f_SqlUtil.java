@@ -4,16 +4,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import po.SamplePojo;
 
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
 import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
+import static utils.basicutil.i_StringUtil.firsttoUpperCase;
 import static utils.basicutil.i_StringUtil.getFirstSubString;
 
 
@@ -131,19 +130,57 @@ public class f_SqlUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            returnConnection(conn);
         }
     }
 
-    private static String[] getFiledsbySql(String sql) {
-        return Objects.requireNonNull(getFirstSubString(sql, "(", ")")).split(",");
+    private static <T> void insertSql(String sql, List<T> listobj) {
+        Connection conn = getConnection();
+        try {
+            logger.info("插入语句:" + sql);
+            if (conn != null) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                conn.setAutoCommit(false);
+                String[] fileds = getFiledsbySql(sql);
+                for (T obj : listobj) {
+                    for (int i = 0; i < fileds.length; i++) {
+                        String value = obj.getClass().getMethod("get" + firsttoUpperCase(fileds[i])).invoke(obj).toString();
+                        statement.setString(i + 1, value);
+                    }
+                    statement.addBatch();
+                }
+                statement.executeBatch();
+                statement.clearBatch();
+                conn.commit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            returnConnection(conn);
+        }
     }
 
+
+    private static String[] getFiledsbySql(String sql) {
+        return getFirstSubString(sql, "(", ")").split(",");
+    }
+
+
     public static void main(String[] args) {
-        JSONArray a = querySql("select a ,b  from datatest limit 10 ");
-        System.out.println(a);
 
+//        JSONArray a = querySql("select a ,b  from datatest limit 10 ", SamplePojo.);
+//        System.out.println(a);
+//
+//
 
-        insertSql("insert into hahhaa (a,b) values (?,?) ", a);
+//
+        List l = new LinkedList();
+        SamplePojo a = new SamplePojo();
+        a.setA("asdf");
+        a.setB("asdfasdfasfd");
+        l.add(a);
+        insertSql("insert into qwer (a,b) values (?,?) ", l);
 
 
 //        List<SamplePojo> b = querySql(createSelectPreSql("datatest", SamplePojo.class) + " limit 10000", SamplePojo.class);

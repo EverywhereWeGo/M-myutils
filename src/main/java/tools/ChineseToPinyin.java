@@ -84,12 +84,7 @@ public class ChineseToPinyin {
     }
 
 
-    //首字母变大写
-    public static String firsttoUpperCase(String str) {
-        char[] strChar = str.toCharArray();
-        strChar[0] -= 32;
-        return String.valueOf(strChar);
-    }
+
 
     public static void main(String[] args) {
         String pinYin = getAllPinyin("号牌号码");

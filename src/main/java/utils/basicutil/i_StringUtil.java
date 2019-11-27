@@ -20,4 +20,11 @@ public class i_StringUtil {
         }
         return str.substring(start + startstr.length(), end);
     }
+
+    //首字母变大写
+    public static String firsttoUpperCase(String str) {
+        char[] strChar = str.toCharArray();
+        strChar[0] -= 32;
+        return String.valueOf(strChar);
+    }
 }

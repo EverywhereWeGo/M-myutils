@@ -4,14 +4,16 @@ package tools;
 输入文本生成pojo
  */
 
-import static tools.ChineseToPinyin.firsttoUpperCase;
 import static tools.ChineseToPinyin.getFirstPinYin;
+import static utils.basicutil.i_StringUtil.firsttoUpperCase;
 
 public class DocToPojo {
     //根据字段名生成
     public static void get1() {
-        String docen = "id,clzp,hphm,hpzl,cllx,clpp,clys,syxz,cljcqk,ryjcqk,clzt,sfzdcllx,zdclx,ccdjrq,yqwjy,jyqz,yqwbf,bfqz,fzjg_c,syr,lxdh_c,lxdz_c,kkid,sfd,mdd,jcmj,jcsj,zjs_sfz,fjs_sfz,ck_sfz,update_time,is_deleted";
-        String docch = "台账id,车辆照片,号牌号码,号牌种类,车辆类型,车辆品牌,车辆颜色,使用性质,车俩检查情况,人员检查情况,车辆状态,是否重点车辆类型,重点车类型,初次登记日期,逾期未检验,检验期至,逾期未报废,报废日期,发证机关_车,所有人,联系电话,联系地址,卡口id,始发地,目的地,检查民警姓名,检查时间,主驾驶身份证,副驾驶身份证,乘客身份证集合,更新时间,是否删除";
+        String docen = "a,b";
+        String docch = "a,b";
+//        String docen = "id,clzp,hphm,hpzl,cllx,clpp,clys,syxz,cljcqk,ryjcqk,clzt,sfzdcllx,zdclx,ccdjrq,yqwjy,jyqz,yqwbf,bfqz,fzjg_c,syr,lxdh_c,lxdz_c,kkid,sfd,mdd,jcmj,jcsj,zjs_sfz,fjs_sfz,ck_sfz,update_time,is_deleted";
+//        String docch = "台账id,车辆照片,号牌号码,号牌种类,车辆类型,车辆品牌,车辆颜色,使用性质,车俩检查情况,人员检查情况,车辆状态,是否重点车辆类型,重点车类型,初次登记日期,逾期未检验,检验期至,逾期未报废,报废日期,发证机关_车,所有人,联系电话,联系地址,卡口id,始发地,目的地,检查民警姓名,检查时间,主驾驶身份证,副驾驶身份证,乘客身份证集合,更新时间,是否删除";
         String[] docens = docen.split(",");
         String[] docchs = docch.split(",");
         StringBuffer sb1 = new StringBuffer();
@@ -59,8 +61,8 @@ public class DocToPojo {
     }
 
     public static void main(String[] args) {
-//        get1();
-        get2();
+        get1();
+//        get2();
 
     }
 
