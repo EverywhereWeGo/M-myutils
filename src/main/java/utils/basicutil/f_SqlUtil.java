@@ -105,7 +105,7 @@ public class f_SqlUtil {
     }
 
     //插入语句中的字段，必须和json中的key一模一样
-    private static void insertSql(String sql, JSONArray ja) {
+    public static void insertSql(String sql, JSONArray ja) {
         Connection conn = getConnection();
         try {
             logger.info("插入语句:" + sql);
@@ -135,7 +135,7 @@ public class f_SqlUtil {
         }
     }
 
-    private static <T> void insertSql(String sql, List<T> listobj) {
+    public static <T> void insertSql(String sql, List<T> listobj) {
         Connection conn = getConnection();
         try {
             logger.info("插入语句:" + sql);
