@@ -1,6 +1,7 @@
-package utils.basicutil;
+package tools;
 
 import po.SamplePojo;
+import po.yicun;
 
 import java.lang.reflect.Field;
 
@@ -42,7 +43,7 @@ public class f_CreateSqlByObject {
 
 
     public static void main(String[] args) {
-        createInsertPreSql("qwer", SamplePojo.class);
+        createInsertPreSql("qwer", yicun.class);
         createSelectPreSql("vehicle_pass", SamplePojo.class);
     }
 
