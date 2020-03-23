@@ -6,34 +6,21 @@
 <!-- debug 当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 动态日志级别 -->
-    <jmxConfigurator />
+    <jmxConfigurator/>
     <!-- 定义日志文件 输出位置 -->
-    <!-- <property name="log_dir" value="C:/test" />-->
-    <property name="log_dir" value="z_logs/" />
+    <!-- <property name="log_dir" value="C:/WhenToRun" />-->
+    <property name="log_dir" value="logs/"/>
     <!-- 日志最大的历史 30天 -->
-    <property name="maxHistory" value="30" />
+    <property name="maxHistory" value="30"/>
 
-    <if condition='property("HOSTNAME").contains("ewg")'>
-        <then>
-            <!-- ConsoleAppender 控制台输出日志 -->
-            <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-                <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
-                    <!--过滤特定字串-->
-                    <evaluator>
-                        <expression>return message.contains("ProducerConfig");</expression>
-                    </evaluator>
-                    <OnMatch>DENY</OnMatch>
-                    <OnMismatch>ACCEPT</OnMismatch>
-                </filter>
-                <encoder>
-                    <pattern>
-                        <!-- 设置日志输出格式 -->
-                        %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
-                    </pattern>
-                </encoder>
-            </appender>
-        </then>
-    </if>
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+            </pattern>
+        </encoder>
+    </appender>
 
     <!-- ERROR级别日志 -->
     <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender -->
@@ -59,7 +46,6 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                <!-- 设置日志输出格式 -->
                 %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
@@ -82,10 +68,11 @@
             <fileNamePattern>${log_dir}/warn/%d{yyyy-MM-dd}-warn-log.log</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
-        <pattern>
-            <!-- 设置日志输出格式 -->
-            %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
-        </pattern>
+        <encoder>
+            <pattern>
+                %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
+            </pattern>
+        </encoder>
     </appender>
 
     <!-- INFO级别日志 appender -->
@@ -101,7 +88,6 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                <!-- 设置日志输出格式 -->
                 %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
@@ -120,7 +106,6 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                <!-- 设置日志输出格式 -->
                 %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
@@ -139,23 +124,23 @@
         </rollingPolicy>
         <encoder>
             <pattern>
-                <!-- 设置日志输出格式 -->
                 %white(%d{yyyy-MM-dd HH:mm:ss}) %highlight(%lsn) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)
             </pattern>
         </encoder>
     </appender>
 
+
     <!-- root级别 DEBUG -->
     <root>
         <!-- 打印debug级别日志及以上级别日志 -->
-        <level value="debug" />
+        <level value="info"/>
         <!-- 控制台输出 -->
-        <appender-ref ref="console" />
+        <appender-ref ref="console"/>
         <!-- 文件输出 -->
-        <appender-ref ref="ERROR" />
-        <appender-ref ref="WARN" />
-        <appender-ref ref="INFO" />
-        <appender-ref ref="DEBUG" />
-        <appender-ref ref="TRACE" />
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="WARN"/>
+        <appender-ref ref="DEBUG"/>
+        <appender-ref ref="TRACE"/>
     </root>
 </configuration>
