@@ -1,7 +1,6 @@
-package tools;
+package tools.createdata;
 
 import com.alibaba.fastjson.JSONObject;
-import tools.createdata.ChineseIDCardNumberGenerator;
 
 public class CreateData {
     public static void main(String[] args) {
