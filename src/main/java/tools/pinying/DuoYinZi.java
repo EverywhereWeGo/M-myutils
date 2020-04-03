@@ -53,20 +53,28 @@ public class DuoYinZi {
         }
     }
 
-    public static String getPinYin(String chinese, String charset) {
-        String[] pinying = transformToPinYin(chinese);
+    public static String getPinYin(String hanyu, String charset) {
+        String[] pinying = transformToPinYin(hanyu);
         //对拼音进行处理，比如转为驼峰或者加下划线
         String filed = concatString(pinying, charset);
         return filed;
     }
 
-    public static String getPinYin(String chinese) {
-        String[] pinying = transformToPinYin(chinese);
+    public static String getPinYin(String hanyu) {
+        String[] pinying = transformToPinYin(hanyu);
         //对拼音进行处理，比如转为驼峰或者加下划线
         String filed = concatString(pinying, "");
         return filed;
     }
 
+    public static String getFirstPinYin(String hanyu) {
+        StringBuffer sb = new StringBuffer();
+        String[] pinying = transformToPinYin(hanyu);
+        for (String obj : pinying) {
+            sb.append(obj.charAt(0));
+        }
+        return sb.toString();
+    }
 
     private static String[] transformToPinYin(String chinese) {
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
