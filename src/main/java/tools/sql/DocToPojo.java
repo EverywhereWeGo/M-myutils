@@ -1,10 +1,10 @@
-package tools;
+package tools.sql;
 
 /*
 输入文本生成pojo
  */
 
-import static tools.ChineseToPinyin.getFirstPinYin;
+import static tools.pinying.ChineseToPinyin.getFirstPinYin;
 import static utils.basicutil.i_StringUtil.firsttoUpperCase;
 
 public class DocToPojo {

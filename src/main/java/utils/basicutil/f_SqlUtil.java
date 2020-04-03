@@ -8,7 +8,10 @@ import po.SamplePojo;
 
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static utils.basicutil.b_DBUtil_ConnectionPool.getConnection;
 import static utils.basicutil.b_DBUtil_ConnectionPool.returnConnection;
@@ -18,6 +21,25 @@ import static utils.basicutil.i_StringUtil.getFirstSubString;
 
 public class f_SqlUtil {
     private final static Logger logger = LoggerFactory.getLogger(f_SqlUtil.class);
+
+    public static void ddlSql(String sql) {
+        Connection conn = getConnection();
+        try {
+            logger.info("语句:" + sql);
+            if (null != conn) {
+                PreparedStatement statement = conn.prepareStatement(sql);
+                statement.setQueryTimeout(120);
+                long stime = System.currentTimeMillis();
+                statement.execute();
+                long etime = System.currentTimeMillis();
+                logger.info("查询时间:" + (etime - stime) + "ms");
+            }
+        } catch (SQLException e) {
+            logger.error("操作失败:" + Arrays.toString(e.getStackTrace()));
+        } finally {
+            returnConnection(conn);
+        }
+    }
 
     public static JSONArray querySql(String sql) {
         ResultSet rs = queryAndReturnResultSet(sql);

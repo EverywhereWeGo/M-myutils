@@ -1,4 +1,4 @@
-package tools;
+package tools.pinying;
 /*
 汉字转成拼音
  */
@@ -84,10 +84,8 @@ public class ChineseToPinyin {
     }
 
 
-
-
     public static void main(String[] args) {
-        String pinYin = getAllPinyin("号牌号码");
+        String pinYin = getAllPinyin("女_男");
         String firstPinYin = getFirstPinYin("号牌号码");
         System.out.println("秋水共长天一色全拼：" + pinYin);
         System.out.println("秋水共长天一色首字母：" + firstPinYin);

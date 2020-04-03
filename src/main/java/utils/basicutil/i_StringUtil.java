@@ -27,4 +27,16 @@ public class i_StringUtil {
         strChar[0] -= 32;
         return String.valueOf(strChar);
     }
+
+    public static String concatString(String[] strs, String charset) {
+        StringBuffer sb = new StringBuffer();
+        for (String p : strs) {
+            sb.append(p).append(charset);
+        }
+        if (charset.length() == 0) {
+            return sb.toString();
+        } else {
+            return sb.deleteCharAt(sb.length() - 1).toString();
+        }
+    }
 }

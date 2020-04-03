@@ -1,4 +1,4 @@
-package tools;
+package tools.sql;
 
 import com.alibaba.fastjson.JSONArray;
 
