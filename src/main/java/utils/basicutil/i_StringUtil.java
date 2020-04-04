@@ -28,15 +28,19 @@ public class i_StringUtil {
         return String.valueOf(strChar);
     }
 
-    public static String concatString(String[] strs, String charset) {
+    public static String stringJoin(String[] strs, String charset) {
         StringBuffer sb = new StringBuffer();
         for (String p : strs) {
             sb.append(p).append(charset);
         }
-        if (charset.length() == 0) {
-            return sb.toString();
+        return deleteChar(sb, charset).toString();
+    }
+
+    public static StringBuffer deleteChar(StringBuffer sb, String charset) {
+        if (null == sb || sb.length() == 0 || charset.length() == 0) {
+            return sb;
         } else {
-            return sb.deleteCharAt(sb.length() - 1).toString();
+            return sb.deleteCharAt(sb.length() - 1);
         }
     }
 }

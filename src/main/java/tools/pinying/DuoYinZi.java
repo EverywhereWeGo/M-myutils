@@ -11,7 +11,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static utils.basicutil.i_StringUtil.concatString;
+import static utils.basicutil.i_StringUtil.deleteChar;
 
 public class DuoYinZi {
     private static Map<String, List<String>> pinyinMap = new HashMap<String, List<String>>();
@@ -53,55 +53,89 @@ public class DuoYinZi {
         }
     }
 
+
     public static String getPinYin(String hanyu, String charset) {
-        String[] pinying = transformToPinYin(hanyu);
-        //对拼音进行处理，比如转为驼峰或者加下划线
+        List<Tuple> pinying = transformToPinYin(hanyu);
         String filed = concatString(pinying, charset);
         return filed;
     }
 
     public static String getPinYin(String hanyu) {
-        String[] pinying = transformToPinYin(hanyu);
-        //对拼音进行处理，比如转为驼峰或者加下划线
+        List<Tuple> pinying = transformToPinYin(hanyu);
         String filed = concatString(pinying, "");
         return filed;
     }
 
+
     public static String getFirstPinYin(String hanyu) {
         StringBuffer sb = new StringBuffer();
-        String[] pinying = transformToPinYin(hanyu);
-        for (String obj : pinying) {
-            sb.append(obj.charAt(0));
+        List<Tuple> tuples = transformToPinYin(hanyu);
+
+        for (Tuple p : tuples) {
+            if (p.isPinYing()) {
+                sb.append(p.getContext().charAt(0));
+            } else {
+                sb.append(p.getContext());
+            }
         }
         return sb.toString();
     }
 
-    private static String[] transformToPinYin(String chinese) {
+
+    //对拼音进行处理，比如转为驼峰或者加下划线
+    private static String concatString(List<Tuple> tuples, String charset) {
+        StringBuffer sb = new StringBuffer();
+        for (Tuple p : tuples) {
+            if (p.isPinYing()) {
+                sb.append(p.getContext()).append(charset);
+            } else {
+                deleteChar(sb, charset).append(p.getContext());
+            }
+        }
+        return sb.toString();
+    }
+
+    private static List<Tuple> transformToPinYin(String chinese) {
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         format.setVCharType(HanyuPinyinVCharType.WITH_V);
 
-        //存放汉字
-        String[] arr = new String[chinese.length()];
+        //把字符串按照中文和其他字符进行切割
+        List<String> fields = new LinkedList<>();
         for (int i = 0; i < chinese.length(); i++) {
-            arr[i] = chinese.substring(i, i + 1);
+            String t = chinese.substring(i, i + 1);
+            //是中文的话新增
+            if (t.matches("[\\u4E00-\\u9FA5]+")) {
+                fields.add(t);
+                //不是中文的话,判断列表中最后一个是否是中文,是的话,新增,不是的话,修改内容
+            } else {
+                if (fields.size() == 0 || fields.get(fields.size() - 1).matches("[\\u4E00-\\u9FA5]+")) {
+                    fields.add(t);
+                } else {
+                    fields.set(fields.size() - 1, fields.get(fields.size() - 1) + t);
+                }
+            }
         }
 
+
         //存放拼音
-        String[] result = new String[arr.length];
+        List<Tuple> result = new LinkedList<>();
 
         //开始遍历语句中的每一个汉字
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < fields.size(); i++) {
+            Tuple tuple = new Tuple();
+            String ch = fields.get(i);
             //如果是汉字
-            if (arr[i].matches("[\\u4E00-\\u9FA5]+")) {
+            if (ch.length() == 1 && ch.matches("[\\u4E00-\\u9FA5]+")) {
+                tuple.setPinYing(true);
                 String[] pys = new String[0];
                 try {
-                    pys = PinyinHelper.toHanyuPinyinStringArray(arr[i].charAt(0), format);
+                    pys = PinyinHelper.toHanyuPinyinStringArray(ch.charAt(0), format);
                 } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
                     badHanyuPinyinOutputFormatCombination.printStackTrace();
                 }
-                //去重
+                //去重,去除音调不同的
                 List<String> list = new LinkedList<String>();
                 for (String py : pys) {
                     if (!list.contains(py)) {
@@ -110,7 +144,7 @@ public class DuoYinZi {
                 }
 
                 if (list.size() == 1) {
-                    result[i] = list.get(0);
+                    tuple.setContext(list.get(0));
                 } else {
                     //遍历该字的每一个读音
                     boolean flag = false;
@@ -118,26 +152,26 @@ public class DuoYinZi {
                         if (pinyinMap.containsKey(s)) {
                             List<String> phrase = pinyinMap.get(s);
                             //连上后一个字
-                            if (i + 1 < chinese.length()) {
-                                String concat = chinese.substring(i, i + 2);
+                            if (i + 1 < fields.size()) {
+                                String concat = ch + fields.get(i + 1);
                                 if (phrase.contains(concat)) {
-                                    result[i] = s;
+                                    tuple.setContext(s);
                                     flag = true;
                                     break;
                                 }
                             }
                             //连上前一个字
                             if (0 <= i - 1) {
-                                String concat = chinese.substring(i - 1, i + 1);
+                                String concat = fields.get(i - 1) + ch;
                                 if (phrase.contains(concat)) {
-                                    result[i] = s;
+                                    tuple.setContext(s);
                                     flag = true;
                                     break;
                                 }
                             }
                             //单字被包含,表示单字时的常用读音,如"否"
-                            if (phrase.contains(arr[i])) {
-                                result[i] = s;
+                            if (phrase.contains(ch)) {
+                                tuple.setContext(s);
                                 flag = true;
                                 break;
                             }
@@ -145,23 +179,58 @@ public class DuoYinZi {
                     }
                     //如果遍历所有的读音都没有,则直接返回原字符
                     if (!flag) {
-                        result[i] = arr[i];
+                        tuple.setContext(ch);
                     }
                 }
             } else {
                 //如果不是汉字,直接返回原字符
-                result[i] = arr[i];
+                tuple.setPinYing(false);
+                tuple.setContext(ch);
             }
+            result.add(tuple);
         }
         return result;
     }
 
+    static class Tuple {
+        private boolean isPinYing;
+        private String context;
+
+        public boolean isPinYing() {
+            return isPinYing;
+        }
+
+        public void setPinYing(boolean pinYing) {
+            isPinYing = pinYing;
+        }
+
+        public String getContext() {
+            return context;
+        }
+
+        public void setContext(String context) {
+            this.context = context;
+        }
+
+        @Override
+        public String toString() {
+            return "Tuple{" +
+                    "isPinYing=" + isPinYing +
+                    ", context='" + context + '\'' +
+                    '}';
+        }
+    }
+
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, BadHanyuPinyinOutputFormatCombination {
-        System.out.println(getPinYin("朝阳"));
+        System.out.println(getPinYin("排污单位名称 所在省 所在市 所在区县 行业类别 提交时间 审批节点 提交审批机关级别 办理类型 元数据 metadata_itemtypeid", "_"));
+        System.out.println(getFirstPinYin("a_首页_asdf_许可证业务审核_申请审核"));
+
 //        System.out.println(Arrays.toString(getPinYin("否")));
 
 //        System.out.println(Arrays.toString(getPinYin("单于夜遁逃")));
 
     }
+
+
 }

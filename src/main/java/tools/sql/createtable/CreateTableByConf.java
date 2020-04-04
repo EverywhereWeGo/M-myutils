@@ -1,16 +1,13 @@
 package tools.sql.createtable;
 
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
-
 import java.util.List;
 
 import static tools.fileReadbyLine.readLine;
 import static tools.pinying.DuoYinZi.getFirstPinYin;
 import static tools.pinying.DuoYinZi.getPinYin;
-import static utils.basicutil.f_SqlUtil.ddlSql;
 
 public class CreateTableByConf {
-    public static void main(String[] args) throws BadHanyuPinyinOutputFormatCombination {
+    public static void main(String[] args) {
         List<String> eachLine = readLine("/Users/everywherewego/IdeaProjects/myutils/src/main/java/tools/sql/createtable/aaa.txt");
 
         String drop = "DROP TABLE IF EXISTS `sys_paiwuxuke_{0}`";
@@ -26,7 +23,7 @@ public class CreateTableByConf {
         //每一行
         for (String line : eachLine) {
             //每一行针对空格分隔
-            if (line.startsWith("#")) {
+            if (line.startsWith("#") || line.length() == 0) {
                 continue;
             }
             String tablename = line.split("=")[0].trim();
@@ -49,8 +46,8 @@ public class CreateTableByConf {
             System.out.println(createTableSql);
 
 
-            ddlSql(dropTableSql);
-            ddlSql(createTableSql);
+//            ddlSql(dropTableSql);
+//            ddlSql(createTableSql);
         }
     }
 

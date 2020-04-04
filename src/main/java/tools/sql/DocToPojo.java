@@ -4,7 +4,7 @@ package tools.sql;
 输入文本生成pojo
  */
 
-import static tools.pinying.ChineseToPinyin.getFirstPinYin;
+import static tools.pinying.DuoYinZi.getFirstPinYin;
 import static utils.basicutil.i_StringUtil.firsttoUpperCase;
 
 public class DocToPojo {
@@ -36,7 +36,7 @@ public class DocToPojo {
 
     //根据sql注释生成
     public static void get2() {
-        String doc = "台账id," + "车辆照片," + "号牌号码," + "号牌种类," + "车辆类型," + "车辆品牌," + "车辆颜色," + "使用性质," + "车俩检查情况,"
+        String doc = "台账id," + "车辆照片," + "号牌号码," + "号牌种类," + "车辆类型," + "车辆品牌," + "车辆颜色," + "使用性质," + "车辆检查情况,"
                 + "人员检查情况," + "车辆状态," + "是否重点车辆类型," + "重点车类型," + "初次登记日期," + "逾期未检验," + "检验期至," + "逾期未报废," + "报废日期,"
                 + "发证机关_车," + "所有人," + "联系电话," + "联系地址," + "卡口id," + "始发地," + "目的地," + "检查民警姓名," + "检查时间," + "主驾驶身份证,"
                 + "副驾驶身份证," + "乘客身份证集合," + "更新时间," + "是否删除";

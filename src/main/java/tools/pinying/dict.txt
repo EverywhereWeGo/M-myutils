@@ -1,3 +1,5 @@
+cha = 查
+che = 车
 cheng = 名称
 dan = 单位
 di = 提交
@@ -9,3 +11,7 @@ sheng = 省
 xin = 信息
 xing = 反省
 pi = 否极泰来
+shu = 数
+zhong = 种类
+se = 颜色
+yuan = 员
