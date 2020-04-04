@@ -36,9 +36,9 @@ public class CreateTableByConf {
 
             //字段名
             StringBuffer sb = new StringBuffer();
-            String[] sp = fieldname.split(" ");
+            String[] sp = fieldname.split(",");
             for (String obj : sp) {
-                String filed = getPinYin(obj, "_");
+                String filed = getPinYin(obj.trim(), "_");
                 String b = createFieldInfo(filed, obj);
                 sb.append(b);
             }

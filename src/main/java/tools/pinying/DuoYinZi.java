@@ -11,8 +11,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static utils.basicutil.i_StringUtil.deleteChar;
-
 public class DuoYinZi {
     private static Map<String, List<String>> pinyinMap = new HashMap<String, List<String>>();
 
@@ -56,14 +54,12 @@ public class DuoYinZi {
 
     public static String getPinYin(String hanyu, String charset) {
         List<Tuple> pinying = transformToPinYin(hanyu);
-        String filed = concatString(pinying, charset);
-        return filed;
+        return concatString(pinying, charset);
     }
 
     public static String getPinYin(String hanyu) {
         List<Tuple> pinying = transformToPinYin(hanyu);
-        String filed = concatString(pinying, "");
-        return filed;
+        return concatString(pinying, "");
     }
 
 
@@ -85,14 +81,14 @@ public class DuoYinZi {
     //对拼音进行处理，比如转为驼峰或者加下划线
     private static String concatString(List<Tuple> tuples, String charset) {
         StringBuffer sb = new StringBuffer();
-        for (Tuple p : tuples) {
-            if (p.isPinYing()) {
-                sb.append(p.getContext()).append(charset);
-            } else {
-                deleteChar(sb, charset).append(p.getContext());
-            }
+        for (int i = 0; i < tuples.size() - 1; i++) {
+            boolean ispy = tuples.get(i).isPinYing();
+            String context = tuples.get(i).getContext();
+            sb.append(context).append(charset);
         }
+        sb.append(tuples.get(tuples.size() - 1).getContext());
         return sb.toString();
+
     }
 
     private static List<Tuple> transformToPinYin(String chinese) {
@@ -101,7 +97,7 @@ public class DuoYinZi {
         format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
         format.setVCharType(HanyuPinyinVCharType.WITH_V);
 
-        //把字符串按照中文和其他字符进行切割
+        //把字符串按照中文和其他字符进行切割 如:你,好,hello,你,我,他
         List<String> fields = new LinkedList<>();
         for (int i = 0; i < chinese.length(); i++) {
             String t = chinese.substring(i, i + 1);
@@ -193,15 +189,15 @@ public class DuoYinZi {
     }
 
     static class Tuple {
-        private boolean isPinYing;
+        private boolean pinYing;
         private String context;
 
         public boolean isPinYing() {
-            return isPinYing;
+            return pinYing;
         }
 
         public void setPinYing(boolean pinYing) {
-            isPinYing = pinYing;
+            this.pinYing = pinYing;
         }
 
         public String getContext() {
@@ -211,19 +207,13 @@ public class DuoYinZi {
         public void setContext(String context) {
             this.context = context;
         }
-
-        @Override
-        public String toString() {
-            return "Tuple{" +
-                    "isPinYing=" + isPinYing +
-                    ", context='" + context + '\'' +
-                    '}';
-        }
     }
 
 
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException, BadHanyuPinyinOutputFormatCombination {
-        System.out.println(getPinYin("排污单位名称 所在省 所在市 所在区县 行业类别 提交时间 审批节点 提交审批机关级别 办理类型 元数据 metadata_itemtypeid", "_"));
+//        System.out.println(getPinYin("排污单位wert名称"));
+//
+//        System.out.println(getPinYin("排污单位名称sdf", "_"));
         System.out.println(getFirstPinYin("a_首页_asdf_许可证业务审核_申请审核"));
 
 //        System.out.println(Arrays.toString(getPinYin("否")));

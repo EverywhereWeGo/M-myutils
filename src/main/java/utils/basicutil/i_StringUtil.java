@@ -30,17 +30,10 @@ public class i_StringUtil {
 
     public static String stringJoin(String[] strs, String charset) {
         StringBuffer sb = new StringBuffer();
-        for (String p : strs) {
-            sb.append(p).append(charset);
+        for (int i = 0; i < strs.length - 1; i++) {
+            sb.append(strs[i]).append(charset);
         }
-        return deleteChar(sb, charset).toString();
-    }
-
-    public static StringBuffer deleteChar(StringBuffer sb, String charset) {
-        if (null == sb || sb.length() == 0 || charset.length() == 0) {
-            return sb;
-        } else {
-            return sb.deleteCharAt(sb.length() - 1);
-        }
+        sb.append(strs[strs.length - 1]);
+        return sb.toString();
     }
 }
