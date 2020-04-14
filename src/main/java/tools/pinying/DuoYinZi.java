@@ -91,6 +91,16 @@ public class DuoYinZi {
 
     }
 
+
+    public static boolean check(List<String> phrase, String str) {
+        for (String obj : phrase) {
+            if (obj.contains(str)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static List<Tuple> transformToPinYin(String chinese) {
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
         format.setCaseType(HanyuPinyinCaseType.LOWERCASE);
@@ -150,7 +160,8 @@ public class DuoYinZi {
                             //连上后一个字
                             if (i + 1 < fields.size()) {
                                 String concat = ch + fields.get(i + 1);
-                                if (phrase.contains(concat)) {
+
+                                if (check(phrase, concat)) {
                                     tuple.setContext(s);
                                     flag = true;
                                     break;
@@ -159,14 +170,14 @@ public class DuoYinZi {
                             //连上前一个字
                             if (0 <= i - 1) {
                                 String concat = fields.get(i - 1) + ch;
-                                if (phrase.contains(concat)) {
+                                if (check(phrase, concat)) {
                                     tuple.setContext(s);
                                     flag = true;
                                     break;
                                 }
                             }
                             //单字被包含,表示单字时的常用读音,如"否"
-                            if (phrase.contains(ch)) {
+                            if (check(phrase, ch)) {
                                 tuple.setContext(s);
                                 flag = true;
                                 break;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import static tools.fileReadbyLine.readLine;
 import static tools.pinying.DuoYinZi.getFirstPinYin;
-import static tools.pinying.DuoYinZi.getPinYin;
+import static utils.basicutil.f_SqlUtil.ddlSql;
 
 public class CreateTableByConf {
     public static void main(String[] args) {
@@ -38,22 +38,21 @@ public class CreateTableByConf {
             StringBuffer sb = new StringBuffer();
             String[] sp = fieldname.split(",");
             for (String obj : sp) {
-                String filed = getPinYin(obj.trim(), "_");
-                String b = createFieldInfo(filed, obj);
+                String filed = getFirstPinYin(obj.trim());
+                String b = createFieldInfo(filed, obj.trim());
                 sb.append(b);
             }
             String createTableSql = modelSql.replace("{0}", tn).replace("{1}", sb.toString()).replace("{2}", tablename);
             System.out.println(createTableSql);
 
-
-//            ddlSql(dropTableSql);
-//            ddlSql(createTableSql);
+            ddlSql(dropTableSql);
+            ddlSql(createTableSql);
         }
     }
 
 
     public static String createFieldInfo(String fileds, String comment) {
-        String modelFile = "`{0}` VARCHAR ( 255 ) DEFAULT NULL COMMENT '{1}',\n";
+        String modelFile = "`{0}` text DEFAULT NULL COMMENT '{1}',\n";
         return modelFile.replace("{0}", fileds).replace("{1}", comment);
 
     }
