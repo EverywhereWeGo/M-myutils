@@ -3,6 +3,7 @@ cha = 查
 che = 车
 chang = 厂
 cheng = 名称
+chuan=上传
 da = 大
 dan = 单位
 de = 的
@@ -32,3 +33,5 @@ xing = 反省
 yuan = 员
 zhong = 种类,重点,重金属
 mi = 秘密
+
+

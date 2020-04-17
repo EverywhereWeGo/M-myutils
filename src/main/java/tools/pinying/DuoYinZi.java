@@ -22,7 +22,7 @@ public class DuoYinZi {
             String s = null;
             try {
                 while ((s = br.readLine()) != null) {
-                    if (s != null) {
+                    if (s != null && s.length() != 0) {
                         String[] arr = s.split("=");
                         String pinyin = arr[0].trim();
                         String chinese = arr[1];
