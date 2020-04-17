@@ -10,34 +10,45 @@ import java.util.ArrayList;
 
 
 public class BianliWenJianJia {
-    private static ArrayList<String> filelist = new ArrayList<String>();
+    static ArrayList<String> dires = new ArrayList<String>();
+    static ArrayList<String> docs = new ArrayList<String>();
 
-    public static void main(String[] args) throws Exception {
-
-        String filePath = "/Users/everywherewego/IdeaProjects/spider/王冲_排污许可/src/main/java/com/bfd/apagexukezhenyewushenhe";
-        getFiles(filePath);
+    public static ArrayList<String> getDirecotrys(String filePath) {
+        direcotrys(filePath);
+        ArrayList<String> re = dires;
+        return re;
     }
 
+    public static ArrayList<String> getFiles(String filePath) {
+        files(filePath);
+        ArrayList<String> re = docs;
+        return re;
+    }
+
+
     /*
-     * 通过递归得到某一路径下所有的目录及其文件
+     * 所有文件夹
      */
-    static void getFiles(String filePath) {
+    public static void direcotrys(String filePath) {
         File root = new File(filePath);
         File[] files = root.listFiles();
         for (File file : files) {
             if (file.isDirectory()) {
-                /*
-                 * 递归调用
-                 */
-                getFiles(file.getAbsolutePath());
-                filelist.add(file.getAbsolutePath());
-//                System.out.println("显示" + filePath + "下所有子目录及其文件" + file.getAbsolutePath());
-//                System.out.println(file.getAbsolutePath());
+                direcotrys(file.getAbsolutePath());
+                dires.add(file.getAbsolutePath());
+            }
+        }
+    }
 
+    //所有文件
+    public static void files(String filePath) {
+        File root = new File(filePath);
+        File[] files = root.listFiles();
+        for (File file : files) {
+            if (file.isDirectory()) {
+                files(file.getAbsolutePath());
             } else {
-//                System.out.println("显示" + filePath + "下所有子目录" + file.getAbsolutePath());
-                System.out.println(file.getAbsolutePath());
-
+                docs.add(file.getAbsolutePath());
             }
         }
     }
