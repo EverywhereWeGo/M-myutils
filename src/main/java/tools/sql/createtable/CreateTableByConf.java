@@ -4,7 +4,6 @@ import java.util.List;
 
 import static tools.fileReadbyLine.readLine;
 import static tools.pinying.DuoYinZi.getFirstPinYin;
-import static utils.basicutil.f_SqlUtil.ddlSql;
 
 public class CreateTableByConf {
     public static void main(String[] args) {
@@ -45,8 +44,8 @@ public class CreateTableByConf {
             String createTableSql = modelSql.replace("{0}", tn).replace("{1}", sb.toString()).replace("{2}", tablename);
             System.out.println(createTableSql);
 
-            ddlSql(dropTableSql);
-            ddlSql(createTableSql);
+//            ddlSql(dropTableSql);
+//            ddlSql(createTableSql);
         }
     }
 
