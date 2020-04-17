@@ -1,6 +1,6 @@
 package helloworld;
 
-import com.alibaba.fastjson.JSONObject;
+import static java.lang.Math.pow;
 
 /**
  * @author everywherewego
@@ -10,11 +10,6 @@ import com.alibaba.fastjson.JSONObject;
 public class asf {
     public static void main(String[] args) {
 
-        String a = "{\"名称\":\"/\",\"批复文号\":\"/\",\"编号\":\"/\"}";
-        JSONObject j = JSONObject.parseObject(a);
-        System.out.println(j);
-
-
-        System.out.println("重金属".contains("重金"));
+        System.out.println(Long.valueOf((long) pow(0, 0)));
     }
 }

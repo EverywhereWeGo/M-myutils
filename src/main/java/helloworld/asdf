@@ -1,0 +1,153 @@
+package com.bfd.apagexukezhenyewushenhe.ashengqingshenhe;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.bfd.utils.Callback;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import static com.bfd.Spider.execute;
+import static com.bfd.utils.HtmlCodeUtil.paramsEncdoe;
+import static tools.CreateSqlByConnection.createInsertSqlByTablename;
+import static tools.DuoYinZi.getFirstPinYin;
+import static utils.DateUtil.getToday;
+import static utils.PropertiesLoadUtil.loadPropertiesGetSetciontoMap;
+import static utils.SqlUtil.*;
+import static utils.StringUtil.getFirstSubString;
+import static utils.StringUtil.getLastSubString;
+
+/**
+ * @author wangchong
+ */
+public class PageA {
+    private static Logger logger = LoggerFactory.getLogger(PageA.class);
+    private static String tableName = "sys_paiwuxuke_" + getFirstPinYin("a_首页_许可证业务审核_申请审核");
+    private static String insertsql = createInsertSqlByTablename(tableName);
+
+
+    public static boolean parseDocumentGetPage(String html) {
+        Document doc = Jsoup.parse(html);
+        //获取总页数
+        String pageInfo = doc.getElementsByClass("pagectrl").get(0).getElementsByTag("div").get(0).text();
+        String currentPage = getFirstSubString(pageInfo, "当前页 ：", " 总页数 ：");
+        String totalPage = getFirstSubString(pageInfo, "总页数 ：", " 首页 ");
+        return currentPage.trim().equals(totalPage.trim());
+    }
+
+    public static JSONArray parseDocument(String html, String type) {
+        Document doc = Jsoup.parse(html);
+        //获取需要的内容
+        Elements elements = doc.getElementsByTag("tbody").get(1).getElementsByTag("tr");
+        JSONArray ja = new JSONArray();
+        for (Element e : elements) {
+            JSONObject jo = new JSONObject();
+            Elements tds = e.getElementsByTag("td");
+            List<String> context = tds.eachText();
+            if (context.size() != 10) {
+                continue;
+            }
+            String clickInfo = tds.get(1).getElementsByTag("a").first().attr("onclick");
+            String dataid = getFirstSubString(clickInfo, "openWWpage('", "','");
+            String itemtypeid = getLastSubString(clickInfo, "','", "')");
+            jo.put("pai_wu_dan_wei_ming_cheng", context.get(1));
+            jo.put("suo_zai_sheng", context.get(2));
+            jo.put("suo_zai_shi", context.get(3));
+            jo.put("suo_zai_qu_xian", context.get(4));
+            jo.put("hang_ye_lei_bie", context.get(5));
+            jo.put("di_jiao_shi_jian", context.get(6));
+            jo.put("shen_pi_jie_dian", context.get(7));
+            jo.put("di_jiao_shen_pi_ji_guan_ji_bie", context.get(8));
+            jo.put("ban_li_lei_xing", type);
+            jo.put("metadata_dataid", dataid);
+            jo.put("metadata_itemtypeid", itemtypeid);
+            ja.add(jo);
+        }
+        return ja;
+    }
+
+
+    public static void assemblyRequest(String typeName, String typeCode) {
+        String url = "http://10.100.248.253/permit/syssp/gzt/gzt!listMore.action";
+
+        Map<String, String> requestHeader = loadPropertiesGetSetciontoMap("conf.properties", "requestheaders", ":");
+        Map<String, String> params = loadPropertiesGetSetciontoMap("conf.properties", "PageA_param", ":");
+        params.put("bllx", typeCode);
+
+        for (int i = 1; ; i++) {
+            logger.info("当前类型:" + typeName + ",当前页:" + i);
+            params.put("page.pageNo", String.valueOf(i));
+
+            int code = execute(url, requestHeader, paramsEncdoe(params), new Callback() {
+                @Override
+                public int checkResult(String result) {
+                    try {
+                        JSONArray re = parseDocument(result, typeName);
+                        insertSql(insertsql, re);
+                        if (parseDocumentGetPage(result)) {
+                            return 1;
+                        }
+                        return 2;
+                    } catch (Exception e) {
+                        logger.error("错误", e);
+                        return 3;
+                    }
+                }
+            });
+            //到最后一页,结束循环
+            if (code == 1) {
+                break;
+            }
+        }
+    }
+
+    public static void pageA() {
+        //查询后一张表,如果有数表示,此阶段已经跑完,不用再跑
+        JSONArray isfinsh = querySql("select metadata_dataid from sys_paiwuxuke_a_a_qyxx_pwdwjbqk where etl_date ='" + getToday() + "'");
+        if (isfinsh.size() > 0) {
+            return;
+        }
+
+        //1.删除跑失败的数据
+        JSONArray errorDate = querySql("select ban_li_lei_xing from " + tableName + " where id = (select MAX(ID) from " + tableName + " where etl_date='" + getToday() + "')");
+        for (Object obj : errorDate) {
+            JSONObject job = (JSONObject) obj;
+            String bllx = job.getString("ban_li_lei_xing");
+            deleteSql("DELETE FROM " + tableName + " WHERE ban_li_lei_xing='" + bllx + "' and etl_date='" + getToday() + "'");
+        }
+        //2.获取已经跑成功的数据，不跑
+        JSONArray correctDate = querySql("select ban_li_lei_xing from " + tableName + " where etl_date='" + getToday() + "'");
+        List<String> correctCode = new LinkedList<>();
+        for (Object obj : correctDate) {
+            JSONObject job = (JSONObject) obj;
+            correctCode.add(job.getString("ban_li_lei_xing"));
+        }
+
+        //开始跑
+        Map<String, String> alltype = new HashMap<>(5);
+        alltype.put("待办", "ZT_3");
+        alltype.put("在办", "ZT_ZB");
+        alltype.put("发证", "ZT_4");
+        alltype.put("不予受理", "ZT_8");
+        alltype.put("审批不通过", "ZT_5");
+        for (Map.Entry<String, String> entry : alltype.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            if (!correctCode.contains(key)) {
+                assemblyRequest(key, value);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        pageA();
+    }
+}
