@@ -7,5 +7,5 @@ public interface Callback {
      * @param s
      * @return
      */
-    StringBuffer eachline(String s, StringBuffer sb);
+    void eachline(String s, StringBuffer sb);
 }

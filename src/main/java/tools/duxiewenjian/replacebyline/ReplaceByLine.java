@@ -43,7 +43,7 @@ public class ReplaceByLine {
         ArrayList<String> files = getFiles("/Users/everywherewego/IdeaProjects/spiderinit/王冲_排污许可/src/main/java/com/bfd");
         replaceByLine("/Users/everywherewego/IdeaProjects/myutils/src/main/java/helloworld/asdf", new Callback() {
             @Override
-            public StringBuffer eachline(String s, StringBuffer sb) {
+            public void eachline(String s, StringBuffer sb) {
                 if (s.contains("sys_paiwuxuke_")) {
                     String context = null;
                     try {
@@ -60,7 +60,6 @@ public class ReplaceByLine {
                 } else {
                     sb.append(s).append("\n");
                 }
-                return sb;
             }
         });
     }
