@@ -184,7 +184,7 @@ public class f_SqlUtil {
     }
 
 
-    private static String[] getFiledsbySql(String sql) {
+    private static String[] getFiledsbySql(String sql) throws Exception {
         return getFirstSubString(sql, "(", ")").split(",");
     }
 

@@ -1,22 +1,20 @@
 package utils.basicutil;
 
 public class i_StringUtil {
-    public static String getLastSubString(String str, String startstr, String endstr) {
+    public static String getLastSubString(String str, String startstr, String endstr) throws Exception {
         int start = str.lastIndexOf(startstr);
         int end = str.lastIndexOf(endstr);
         if ((-1 == start) || (-1 == end)) {
-            System.out.println("未找到起始子串或结束子串");
-            return null;
+            throw new Exception("未找到起始子串或结束子串");
         }
         return str.substring(start + startstr.length(), end);
     }
 
-    public static String getFirstSubString(String str, String startstr, String endstr) {
+    public static String getFirstSubString(String str, String startstr, String endstr) throws Exception {
         int start = str.indexOf(startstr);
         int end = str.indexOf(endstr);
         if ((-1 == start) || (-1 == end)) {
-            System.out.println("未找到起始子串或结束子串");
-            return null;
+            throw new Exception("未找到起始子串或结束子串");
         }
         return str.substring(start + startstr.length(), end);
     }
