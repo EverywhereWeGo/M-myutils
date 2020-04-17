@@ -1,12 +1,11 @@
-package tools;
+package tools.duxiewenjian;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 
-public class fileReadbyLine {
-
+public class FileTools {
     public static List<String> readLine(String filePath) {
         List<String> res = new LinkedList<>();
         try {
@@ -32,5 +31,18 @@ public class fileReadbyLine {
             e.printStackTrace();
         }
         return res;
+    }
+
+    public static void writeFile(String filePath, String context) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(filePath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        out.write(context);
+        out.flush();
+        out.close();
+
     }
 }

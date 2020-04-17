@@ -2,7 +2,7 @@ package tools.sql.createtable;
 
 import java.util.List;
 
-import static tools.fileReadbyLine.readLine;
+import static tools.duxiewenjian.FileTools.readLine;
 import static tools.pinying.DuoYinZi.getFirstPinYin;
 
 public class CreateTableByConf {
