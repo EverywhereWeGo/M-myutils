@@ -21,8 +21,9 @@ public class ReplaceByLine {
     public static void replaceByLine(String filepath, Callback callback) {
         List<String> list = readLine(filepath);
         StringBuffer sb = new StringBuffer();
+        int flag = 0;
         for (String s : list) {
-            callback.eachline(s, sb);
+            callback.eachline(flag++, s, sb);
         }
         System.out.println(sb.toString());
 //        writeFile(filepath, sb.toString());
@@ -41,9 +42,10 @@ public class ReplaceByLine {
         }
 
         ArrayList<String> files = getFiles("/Users/everywherewego/IdeaProjects/spiderinit/王冲_排污许可/src/main/java/com/bfd");
+
         replaceByLine("/Users/everywherewego/IdeaProjects/myutils/src/main/java/helloworld/asdf", new Callback() {
             @Override
-            public void eachline(String s, StringBuffer sb) {
+            public void eachline(int falg, String s, StringBuffer sb) {
                 if (s.contains("sys_paiwuxuke_")) {
                     String context = null;
                     try {
