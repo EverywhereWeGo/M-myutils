@@ -154,6 +154,8 @@ public class DuoYinZi {
                 } else {
                     //遍历该字的每一个读音
                     boolean flag = false;
+
+                    //先组成词组看有没有符合的
                     for (String s : list) {
                         if (pinyinMap.containsKey(s)) {
                             List<String> phrase = pinyinMap.get(s);
@@ -176,14 +178,25 @@ public class DuoYinZi {
                                     break;
                                 }
                             }
-                            //单字被包含,表示单字时的常用读音,如"否"
-                            if (check(phrase, ch)) {
-                                tuple.setContext(s);
-                                flag = true;
-                                break;
+                        }
+                    }
+
+                    //再看单字有没有符合的
+                    if (!flag) {
+                        for (String s : list) {
+                            if (pinyinMap.containsKey(s)) {
+                                List<String> phrase = pinyinMap.get(s);
+                                //单字被包含,表示单字时的常用读音,如"否"
+                                if (check(phrase, ch)) {
+                                    tuple.setContext(s);
+                                    flag = true;
+                                    break;
+                                }
                             }
                         }
                     }
+
+
                     //如果遍历所有的读音都没有,则直接返回原字符
                     if (!flag) {
                         tuple.setContext(ch);
