@@ -28,15 +28,15 @@ public class EachTable {
         return list;
     }
 
-    public static void showtablename() {
-        List<String> eachtable = eachtable("spider", "sys_jsswryzdjkxt");
+    public static void showtablename(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
         for (String e : eachtable) {
             System.out.println(e);
         }
     }
 
-    public static void altertable() {
-        List<String> eachtable = eachtable("spider", "sys_jsswryzdjkxt");
+    public static void altertable(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
         for (String e : eachtable) {
             JSONArray tables = querySql("desc " + e);
 
@@ -53,27 +53,27 @@ public class EachTable {
         }
     }
 
-    public static void counttable() {
-        List<String> eachtable = eachtable("spider", "sys_jsswryzdjkxt");
+    public static void counttable(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
         for (String e : eachtable) {
+            JSONArray tables = querySql("select count(*) as count from " + e);
+            String count = tables.getJSONObject(0).getString("count");
+            System.out.println(e + ":" + count);
 
-            JSONArray tables = querySql("desc " + e);
 
-            for (Object ob : tables) {
-                JSONObject jsonObject1 = (JSONObject) ob;
-                String b = jsonObject1.getString("Field");
+        }
+    }
 
-                if ("id".equals(b) || "etl_date".equals(b)) {
-                    continue;
-                }
-                ddlSql("alter table " + e + "  modify " + b + " text");
-
-            }
+    public static void truncateTable(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
+        for (String e : eachtable) {
+            ddlSql("truncate table " + e);
         }
     }
 
 
     public static void main(String[] args) {
-        showtablename();
+        truncateTable("spider", "sys_nyjkxtydjkpt");
+//        counttable();
     }
 }
