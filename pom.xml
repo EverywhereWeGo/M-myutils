@@ -271,10 +271,10 @@
                     <!--项目打包为jar包时排除这些文件，如果将配置文件打到jar包，则会优先读取jar包中的配置文件，不会读取conf目录下的配置文件-->
                     <!--注意这玩意从编译结果目录开始算目录结构-->
                     <excludes>
-                        <exclude>/*.yaml</exclude>
-                        <exclude>/*.yml</exclude>
-                        <exclude>/*.xml</exclude>
-                        <exclude>/*.properties</exclude>
+                        <exclude>*.yaml</exclude>
+                        <exclude>*.yml</exclude>
+                        <exclude>*.xml</exclude>
+                        <exclude>*.properties</exclude>
                     </excludes>
                     <outputDirectory>
                         ${project.build.directory}/PACKAGE/${project.name}
