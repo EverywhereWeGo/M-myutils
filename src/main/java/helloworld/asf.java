@@ -1,6 +1,6 @@
 package helloworld;
 
-import static java.lang.Math.pow;
+import static tools.pinying.DuoYinZi.getFirstPinYin;
 
 /**
  * @author everywherewego
@@ -10,6 +10,6 @@ import static java.lang.Math.pow;
 public class asf {
     public static void main(String[] args) {
 
-        System.out.println(Long.valueOf((long) pow(0, 0)));
+        System.out.println(getFirstPinYin("大气污染物排放执行标准名称"));
     }
 }
