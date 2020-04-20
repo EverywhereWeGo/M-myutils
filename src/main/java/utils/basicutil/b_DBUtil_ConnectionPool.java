@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
@@ -124,7 +123,7 @@ public class b_DBUtil_ConnectionPool {
                     Connection connectionforcheck = checkandcreate(getConnectionforCheck());
                     returnConnection(connectionforcheck);
                 } catch (Exception e) {
-                    logger.error("dbcheck失败:" + e.getMessage() + ":" + Arrays.toString(e.getStackTrace()));
+                    logger.error("dbcheck失败", e);
                 }
             }
         }, 60, 60, TimeUnit.SECONDS);
