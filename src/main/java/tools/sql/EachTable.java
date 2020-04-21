@@ -72,8 +72,15 @@ public class EachTable {
     }
 
 
+    public static void deleteTable(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
+        for (String e : eachtable) {
+            ddlSql("DELETE FROM " + e + " WHERE etl_date='20200421'");
+        }
+    }
+
+
     public static void main(String[] args) {
-        truncateTable("spider", "sys_nyjkxtydjkpt");
-//        counttable();
+        counttable("spider", "sys_");
     }
 }
