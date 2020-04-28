@@ -79,8 +79,30 @@ public class EachTable {
         }
     }
 
+    public static void descFields(String databaseName, String prex) {
+        List<String> eachtable = eachtable(databaseName, prex);
+        for (String e : eachtable) {
+            JSONArray jsonArray = querySql("show create table " + e);
+            String create_table = jsonArray.getJSONObject(0).getString("Create Table");
+            String substring = create_table.substring(create_table.lastIndexOf("COMMENT=")).replace("COMMENT=", "").replace("'", "");
+
+
+            JSONArray tables = querySql("SHOW FULL COLUMNS FROM " + e);
+            for (Object ob : tables) {
+                String a = ((JSONObject) ob).getString("Field");
+                String b = ((JSONObject) ob).getString("Comment");
+
+                System.out.print(e + " ");
+                System.out.print(substring + " ");
+
+                System.out.print(a + " ");
+                System.out.println(b);
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
-        counttable("spider", "sys_");
+        descFields("spider", "sys_");
     }
 }
