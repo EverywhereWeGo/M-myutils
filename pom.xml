@@ -213,6 +213,16 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.0.1</version>
+        </dependency>
 
 
     </dependencies>
@@ -228,18 +238,18 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/application*.yml</include>
-                    <include>**/application*.yaml</include>
-                    <include>**/application*.properties</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.yaml</include>
+                    <include>**/*.properties</include>
                 </includes>
             </resource>
 
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                    <exclude>**/application*.yml</exclude>
-                    <exclude>**/application*.yaml</exclude>
-                    <exclude>**/application*.properties</exclude>
+                    <exclude>**/*.yml</exclude>
+                    <exclude>**/*.yaml</exclude>
+                    <exclude>**/*.properties</exclude>
                 </excludes>
             </resource>
 
@@ -321,7 +331,7 @@
                                 <resource>
                                     <directory>${basedir}/src/main/resources/</directory>
                                     <includes>
-                                        <include>*.*</include>
+                                        <include>*</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
@@ -341,7 +351,7 @@
                                 <resource>
                                     <directory>${basedir}/01.terminal/remote</directory>
                                     <includes>
-                                        <include>*.*</include>
+                                        <include>*</include>
                                     </includes>
                                     <filtering>true</filtering>
                                 </resource>
